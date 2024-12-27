@@ -30,7 +30,7 @@ matplotlib-inline==0.1.7
 mdurl==0.1.2
 narwhals==1.18.3
 nest-asyncio==1.6.0
-numpy==2.2.0
+numpy==2.2.1
 openpyxl==3.1.5
 packaging==24.2
 pandas==2.2.3
