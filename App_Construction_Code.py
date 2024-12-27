@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 import pickle
 import gzip
-import os
+#import os
 
 ### Cache the model loading function ###
 @st.cache_resource
@@ -15,12 +15,11 @@ def load_model():
     return model
 
 ### Cache the prediction function ###
-#@st.cache_resource
 def predict_species(model, input_df):
     return model.predict(input_df)[0]
 
 ### Set the working directory to the specified path ###
-os.chdir("C:\\Users\\Fateh-Nassim MELZI\\Documents\\AI_Projects\\Iris_Flower_Spicies_Classification_Project\\App_Construction")
+#os.chdir("C:\\Users\\Fateh-Nassim MELZI\\Documents\\AI_Projects\\Iris_Flower_Spicies_Classification_Project\\App_Construction")
 
 ### Load the trained model ###
 model = load_model()
