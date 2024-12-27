@@ -1,4 +1,17 @@
+# Environnement virtuel
+venv/
+.env/
+
+# Streamlit cache
+.streamlit/
+
+# Fichiers temporaires ou secrets
+*.log
+*.env
 __pycache__/
 *.pyc
-.DS_Store
-venv/
+
+# Données et fichiers temporaires
+*.csv
+*.xlsx
+*.DS_Store
