@@ -57,11 +57,11 @@ st.subheader(f"The predicted iris flower species is: 🌸 {iris_species}")
 ### Display corresponding image in an expander ###
 with st.expander("See predicted species image"):
     if iris_species == 'versicolor':
-        st.image("Iris_Versicolor_Image.png", caption="Iris Versicolor", use_container_width=True)
+        st.image("Iris_Versicolor_Image.png", caption="", use_container_width=True)
     elif iris_species == 'virginica':
-        st.image("Iris_Virginica_Image.png", caption="Iris Virginica", use_container_width=True)
+        st.image("Iris_Virginica_Image.png", caption="", use_container_width=True)
     else:
-        st.image("Iris_Setosa_Image.png", caption="Iris Setosa", use_container_width=True)
+        st.image("Iris_Setosa_Image.png", caption="", use_container_width=True)
 
 ### Display the prediction probabilities in an expander ###
 with st.expander("See prediction probabilities"):
