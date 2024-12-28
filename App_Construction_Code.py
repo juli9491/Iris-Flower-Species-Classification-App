@@ -6,7 +6,10 @@ from sklearn.ensemble import RandomForestClassifier
 import pickle
 import gzip
 
-### Cache the model loading function ###
+
+### Functions ###
+
+### Model loading function ###
 @st.cache_resource
 def load_model():
     with gzip.open("Model.pkl.gz", 'rb') as file:
@@ -19,18 +22,30 @@ def predict_species(model, input_df):
     predicted_class = model.predict(input_df)[0]
     return predicted_class, probabilities
 
-### Load the trained model ###
-model = load_model()
+
 
 ### Streamlit app design ###
-st.title("🌸Iris Flower Species Classification")
 
-# Description with info box and emoji
+### Set page configuration ###
+st.set_page_config(page_title="Iris Flower Species Classification", page_icon="🌸", layout="centered")
+
+### Set app title and description ###
+st.title("🌸 Iris Flower Species Classification")
+
+### App description ### 
 st.info(
     """
-    ℹ️ **This application allows users to predict the species of an Iris flower based on its characteristics. The application will predict the species of the Iris flower and display an image corresponding to the predicted species. Additionally, the application displays the prediction probabilities for each species to provide more insight into the prediction.**
+    ℹ️ **This application uses AI 🤖 to predict the species of an Iris flower based on its characteristics. The application will predict the species of the Iris flower and display an image corresponding to the predicted species. Additionally, the application displays the prediction probabilities for each species to provide more insight into the prediction.**
+    
+    **📝 Instructions:**
+    1. Adjust the sliders in the sidebar to input the characteristics of the Iris flower.
+    2. The predicted species will be displayed.
+    3. 👇Click on the expanders to see the predicted species image and prediction probabilities.
     """
 )
+
+### Load the trained model ###
+model = load_model()
 
 ### Sidebar for user input ###
 st.sidebar.header('Input Iris Flower Characteristics')
@@ -65,6 +80,23 @@ with st.expander("See predicted species image"):
 
 ### Display the prediction probabilities in an expander ###
 with st.expander("See prediction probabilities"):
-    #st.subheader("Prediction Probabilities")
     prob_df = pd.DataFrame(probabilities, index=model.classes_, columns=["Probability"])
     st.bar_chart(prob_df)
+
+### Additional information about the species in the sidebar ###
+st.sidebar.subheader("Learn more about Iris species 💡")
+st.sidebar.markdown("Hover over the species names to see more information.")
+st.sidebar.markdown(
+    """
+    <div style="display: flex; align-items: center;">
+        <span title="Iris Setosa: This species is known for its small size and bright blue or purple flowers.">🌸 Iris Setosa</span>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <span title="Iris Versicolor: Also known as the Blue Flag Iris, it has larger flowers that can be blue, purple, or yellow.">🌸 Iris Versicolor</span>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <span title="Iris Virginica: This species is similar to Iris Versicolor but typically has larger flowers and can be found in a variety of colors.">🌸 Iris Virginica</span>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
