@@ -5,7 +5,6 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 import pickle
 import gzip
-#import os
 
 ### Cache the model loading function ###
 @st.cache_resource
@@ -14,19 +13,28 @@ def load_model():
         model = pickle.load(file)
     return model
 
-### Cache the prediction function ###
+### Prediction function ###
 def predict_species(model, input_df):
-    return model.predict(input_df)[0]
-
-### Set the working directory to the specified path ###
-#os.chdir("C:\\Users\\Fateh-Nassim MELZI\\Documents\\AI_Projects\\Iris_Flower_Spicies_Classification_Project\\App_Construction")
+    probabilities = model.predict_proba(input_df)[0]
+    predicted_class = model.predict(input_df)[0]
+    return predicted_class, probabilities
 
 ### Load the trained model ###
 model = load_model()
 
 ### Streamlit app design ###
-st.sidebar.header('What is the species of my Iris flower?')
-st.sidebar.subheader("Iris flower characteristics:")
+st.title("🌸Iris Flower Species Classification")
+
+# Description with info box and emoji
+st.info(
+    """
+    ℹ️ **This application allows users to predict the species of an Iris flower based on its characteristics. The application will predict the species of the Iris flower and display an image corresponding to the predicted species. Additionally, the application displays the prediction probabilities for each species to provide more insight into the prediction.**
+    """
+)
+
+### Sidebar for user input ###
+st.sidebar.header('Input Iris Flower Characteristics')
+st.sidebar.subheader("Adjust the sliders to input the characteristics:")
 
 ### Set up sliders for each characteristic of the iris flower ###
 sepal_length = st.sidebar.slider("Sepal length", 4.3, 7.9, 5.3)
@@ -41,14 +49,22 @@ input_dict = {'sepal_length': sepal_length, 'sepal_width': sepal_width, 'petal_l
 input_df = pd.DataFrame(input_dict, index=[0])
 
 ### Predict the species of the iris flower based on the entered characteristics ###
-iris_species = predict_species(model, input_df)
+iris_species, probabilities = predict_species(model, input_df)
 
 ### Display the predicted species of the iris flower ###
-st.header(f"The iris flower species is: {iris_species}")
+st.subheader(f"The predicted iris flower species is: 🌸 {iris_species}")
 
-if iris_species == 'versicolor':
-    st.image("Iris_Versicolor_Image.png", caption="", use_container_width=True)
-elif iris_species == 'virginica':
-    st.image("Iris_Virginica_Image.png", caption="", use_container_width=True)
-else:
-    st.image("Iris_Setosa_Image.png", caption="", use_container_width=True)
+### Display corresponding image in an expander ###
+with st.expander("See predicted species image"):
+    if iris_species == 'versicolor':
+        st.image("Iris_Versicolor_Image.png", caption="Iris Versicolor", use_container_width=True)
+    elif iris_species == 'virginica':
+        st.image("Iris_Virginica_Image.png", caption="Iris Virginica", use_container_width=True)
+    else:
+        st.image("Iris_Setosa_Image.png", caption="Iris Setosa", use_container_width=True)
+
+### Display the prediction probabilities in an expander ###
+with st.expander("See prediction probabilities"):
+    #st.subheader("Prediction Probabilities")
+    prob_df = pd.DataFrame(probabilities, index=model.classes_, columns=["Probability"])
+    st.bar_chart(prob_df)
